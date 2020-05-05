@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 from sympy.physics.quantum.circuitplot import matplotlib
 #%matplotlibinline
 # reading in the file, creating dataframe object
-file = pd.read_csv("AllGenes.csv", header=0)
+file = pd.read_csv("SigGene.csv", header=0)
 
 
 def kmeans(file):
@@ -60,9 +60,9 @@ def kmeans(file):
     m_wss_arr = []
     m_bss_arr = []
     for r in range(10):
-        print("\nIteration: ", r, "\n")
+        print("\nIteration: ", r)
         for i in k:
-            # print("K value: ",i)
+            print("K value: ", i)
             # print("\n")
             randCentroids = []
             randNums = []
@@ -82,7 +82,7 @@ def kmeans(file):
             # random.sample(range(100), 10)
             # randNums = [0,1]
             # creating random centroids
-            # print("Random Numbers: ",randNums)
+            print("Random Numbers: ", randNums)
             for x in randNums:
                 randCentroids.append(new_df.iloc[x])
             # randCentroids = np.array(randCentroids)
@@ -154,7 +154,7 @@ def kmeans(file):
                         # print(len(arr))
                     newCentroids.append(np.mean(arr, axis=0))
                     avgOfAll = np.mean(new_df, axis=0)
-                    # print("Averageg of all points: ", avgOfAll)
+                    #print("Average of all points: ", avgOfAll)
                     # print(newCentroids)
                     if (len(arr) != 0):
                         for h in range(len(arr)):
@@ -163,14 +163,17 @@ def kmeans(file):
                             WSS += dist.cityblock(arr[h], newCentroids[point]) ** 2
                         BSS += (dist.cityblock(avgOfAll, newCentroids[point]) ** 2) * len(arr)
                 # print("Centroid index: " ,e_clusters)
-                # print("Euclidean: iteration: " +str(it)+"\n" + "\nWSS: ", WSS,"\nBSS: ",BSS)
-                # print("\n")
+                print("-----------------")
+                print("Euclidean: iteration: " +str(it)+"\n" + "\nWSS: ", WSS, "\nBSS: ", BSS)
+                #print("\n")
                 # e_totalWSS +=WSS
                 # e_totalBSS += BSS
                 if (np.array_equal(newCentroids, randCentroids)):
                     e_wss_arr.append(WSS)
                     e_bss_arr.append(BSS)
-                    # print("\nCentroids converged.\n")
+                    print("\n Centroids converged.\n")
+
+                    print("--------------------------------")
                     break
 
                 randCentroids = newCentroids
@@ -198,6 +201,8 @@ def kmeans(file):
             # print(randCentroids)
 
             # manhatten distance measures
+
+            print("*****************************")
             for it in range(100):
                 m_dist_vals = []
                 # gets the distance value of each point to each centroid
@@ -257,7 +262,7 @@ def kmeans(file):
                         # print(len(arr))
                     newCentroids.append(np.mean(arr, axis=0))
                     avgOfAll = np.mean(new_df, axis=0)
-                    # print("Averageg of all points: ", avgOfAll)
+                    # print("Average of all points: ", avgOfAll)
                     # print(newCentroids)
                     if (len(arr) != 0):
                         for h in range(len(arr)):
@@ -266,22 +271,24 @@ def kmeans(file):
                             WSS += dist.cityblock(arr[h], newCentroids[point]) ** 2
                         BSS += (dist.cityblock(avgOfAll, newCentroids[point]) ** 2) * len(arr)
                 # print("Centroid index: " ,e_clusters)
-                # print("Manhatten: iteration: " +str(it)+"\n" + "\nWSS: ", WSS,"\nBSS: ",BSS)
+
+                print("Manhatten: iteration: " +str(it)+"\n" + "\nWSS: ", WSS, "\nBSS: ", BSS)
                 # print("\n")
                 m_totalWSS += WSS
                 m_totalBSS += BSS
 
                 if (np.array_equal(newCentroids, randCentroids)):
-                    # print("\nCentroids converged.\n")
+                    print("\nCentroids converged.\n")
+                    print("-----------------------------------------------")
                     m_wss_arr.append(WSS)
                     m_bss_arr.append(BSS)
                     break
 
                 randCentroids = newCentroids
-    print("Euclidean WSS array: ", e_wss_arr, "\n", len(e_wss_arr))
-    print("Euclidean BSS array: ", e_bss_arr, "\n", len(e_bss_arr))
-    print("Manhatten WSS array: ", m_wss_arr, "\n", len(m_wss_arr))
-    print("Manhatten BSS array: ", m_bss_arr, "\n", len(m_bss_arr))
+    #print("Euclidean WSS array: ", e_wss_arr, "\n", len(e_wss_arr))
+    #print("Euclidean BSS array: ", e_bss_arr, "\n", len(e_bss_arr))
+    ##print("Manhatten WSS array: ", m_wss_arr, "\n", len(m_wss_arr))
+    #print("Manhatten BSS array: ", m_bss_arr, "\n", len(m_bss_arr))
     arr_measures = []
     arr_measures.append(e_wss_arr)
     arr_measures.append(e_bss_arr)
@@ -303,12 +310,12 @@ def kmeans(file):
         k3 = k3 / 10
         list.append(k3)
 
-        print(k1, k2, k3)
+        #print(k1, k2, k3)
     # print(measure + " for class " + label)
     #display(arr_measures)
     wsstable = PrettyTable()
 
-    print(k)
+    print("WSS Table")
     map(str, k)
     wsstable.field_names = ["", k[0], k[1], k[2]]
     wsstable.add_row(["Euclidean: WSS", list[0], list[1], list[2]])
@@ -316,8 +323,7 @@ def kmeans(file):
     wsstable.add_row(["Manhatten: WSS", list[6], list[7], list[8]])
     #table.add_row(["Manhatten: BSS", list[9], list[10], list[11]])
 
-
-    print(list[3], list[0])
+    print("Ratio Table")
     ratiotable = PrettyTable()
     ratiotable.field_names = ["", k[0], k[1], k[2]]
     ratiotable.add_row(["Euclidean: Ratio", (list[3]/list[0]), (list[4]/list[1]), (list[5]/list[2])])
@@ -326,7 +332,7 @@ def kmeans(file):
 
     print(wsstable)
     print(ratiotable)
-
+    print("\n", "This is the entropy of the parent: ", ent(df.iloc[:,-1]), "\n")
 
 
     # m_meanWSS = m_totalWSS/10
@@ -367,7 +373,9 @@ def kmeans(file):
 def ent(data):
     p_data = data.value_counts()
     entropy = scipy.stats.entropy(p_data, base=2)
+
     return entropy
+
 
 # def infoGain(data):
 
